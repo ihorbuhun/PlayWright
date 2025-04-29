@@ -1,11 +1,10 @@
 import {expect, Page} from '@playwright/test'
+import {DateHelper} from "./dateHelper";
 
-export class DatePickerPage {
-
-    private readonly page: Page
+export class DatePickerPage extends DateHelper{
 
     constructor(page: Page) {
-        this.page = page
+        super(page);
     }
 
     async selectCommondatePickerDateFromToday(numberOfDaysFromToday: number) {
@@ -31,8 +30,8 @@ export class DatePickerPage {
         let date = new Date()
         date.setDate(date.getDate() + numberOfDaysFromToday)
         const expectedDate = date.getDate( ).toString()
-        const expectedMonthShot = date.toLocaleString('En-US', {month: 'short'})
-        const expectedMonthLong = date.toLocaleString('En-US', {month: 'long'})
+        const expectedMonthShot = this.getShortMonth(date)
+        const expectedMonthLong = this.getLongMonth(date)
         const expectedYear = date.getFullYear()
         const dateToAssert = `${expectedMonthShot} ${expectedDate}, ${expectedYear}`
         let calendarMonthAndYear = await this.page.locator('nb-calendar-view-mode').textContent()

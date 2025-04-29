@@ -1,30 +1,26 @@
-import {test, expect} from 'playwright/test'
-import {NavigationPage} from '../page-objects/navigationPage'
-import {FormLayoutsPage} from "../page-objects/formLayoutsPage";
-import {DatePickerPage} from "../page-objects/datePickerPage";
+import {test} from 'playwright/test'
+import {PageObjectManager} from '../page-objects/pageObjectManager'
 
 test.beforeEach(async({page}) => {
     await page.goto('http://localhost:4200/')
 })
 
 test('navigate to form page', async({page}) => {
-    const navigateTo = new NavigationPage(page)
-    await navigateTo.formLayoutsPage()
-    await navigateTo.datepickerPage()
-    await navigateTo.smartTablePage()
-    await navigateTo.toastrPage()
-    await navigateTo.tooltipPage()
+    const pm = new PageObjectManager(page)
+    await pm.navigateTo().formLayoutsPage()
+    await pm.navigateTo().datepickerPage()
+    await pm.navigateTo().smartTablePage()
+    await pm.navigateTo().toastrPage()
+    await pm.navigateTo().tooltipPage()
 })
 
 test('parametrized methods', async({page}) => {
-    const navigateTo = new NavigationPage(page)
-    const onFormLayoutsPage = new FormLayoutsPage(page)
-    const datePickerPage = new DatePickerPage(page)
+    const pm = new PageObjectManager(page)
 
-    await navigateTo.formLayoutsPage()
-    await onFormLayoutsPage.submitUsingTheGridFormWithCredentialsAndSelectOption('test@test.com', 'Welcome1', 'Option 1')
-    await onFormLayoutsPage.submitInlineFormWithNameEmailAndCheckbox('John Wick', 'John@google.com', true)
-    await navigateTo.datepickerPage()
-    await datePickerPage.selectCommondatePickerDateFromToday(5)
-    await datePickerPage.selectDatePickerWithRangeFromToday(6, 15)
+    await pm.navigateTo().formLayoutsPage()
+    await pm.onFormLayoutsPage().submitUsingTheGridFormWithCredentialsAndSelectOption('test@test.com', 'Welcome1', 'Option 1')
+    await pm.onFormLayoutsPage().submitInlineFormWithNameEmailAndCheckbox('John Wick', 'John@google.com', true)
+    await pm.navigateTo().datepickerPage()
+    await pm.onDatePickerPage().selectCommondatePickerDateFromToday(5)
+    await pm.onDatePickerPage().selectDatePickerWithRangeFromToday(6, 15)
 })
